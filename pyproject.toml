@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scoring-gate"
+version = "0.1.0"
+description = "Release gate for automated scoring models: agreement, fairness and decision checks against a human-scored gold set."
+requires-python = ">=3.10"
+dependencies = ["numpy", "pandas", "pyyaml", "typer"]
+
+[project.optional-dependencies]
+dev = ["pytest", "scikit-learn"]
+
+[project.scripts]
+scoring-gate = "scoring_gate.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
