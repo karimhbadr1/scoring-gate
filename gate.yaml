@@ -1,0 +1,18 @@
+# Release gate for a scoring model. Thresholds are agreed before results are seen.
+columns:
+  reference: human_1        # human score treated as the truth
+  second_rater: human_2     # used only to compute the human-human ceiling
+  model: model_score
+  group: group
+
+agreement:
+  min_qwk_lower_ci: 0.70    # lower bound of the 95% bootstrap CI must clear this
+  max_gap_to_human: 0.10    # model-human QWK may be at most this far below human-human
+  n_boot: 1000
+
+fairness:
+  max_abs_smd: 0.15         # per group: (model mean - human mean) / human SD
+
+decision:
+  cut: 2                    # pass mark on the 0-4 scale
+  max_type_ii_gap: 0.10     # largest difference in false-fail rates between groups
