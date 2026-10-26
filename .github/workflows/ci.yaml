@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
+  scoring-gate:
+    needs: tests                     # only run the gate if the code itself is sound
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e .
+      - name: Run release gate
+        run: scoring-gate --data data/gold.csv --config gate.yaml --report report.md
+      - name: Add report to the run summary
+        if: always()                 # show the report even when the gate fails
+        run: cat report.md >> "$GITHUB_STEP_SUMMARY"
