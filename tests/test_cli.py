@@ -13,18 +13,18 @@ def run(*args):
 
 
 def test_pass_exits_zero():
-    result = run("--data", str(ROOT / "data" / "gold.csv"))
+    result = run("--data", str(ROOT / "tests" / "fixtures" / "fair.csv"))
     assert result.exit_code == 0
     assert "PASS" in result.output
 
 
 def test_fail_exits_one():
-    result = run("--data", str(ROOT / "data" / "gold_biased.csv"))
+    result = run("--data", str(ROOT / "tests" / "fixtures" / "biased.csv"))
     assert result.exit_code == 1
     assert "FAIL" in result.output
 
 
 def test_report_file_written(tmp_path):
     out = tmp_path / "report.md"
-    run("--data", str(ROOT / "data" / "gold.csv"), "--report", str(out))
+    run("--data", str(ROOT / "tests" / "fixtures" / "fair.csv"), "--report", str(out))
     assert out.read_text().startswith("## Scoring gate")
